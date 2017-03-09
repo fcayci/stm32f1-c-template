@@ -9,8 +9,10 @@
 // Define some types for readibility
 #define int32_t         int
 #define int16_t         short
+#define int8_t          char
 #define uint32_t        unsigned int
 #define uint16_t        unsigned short
+#define uint8_t         unsigned char
 
 // Define the base addresses for RCC and GPIOD peripherals.
 // You can calculate the addresses relative to periph_base,
@@ -34,9 +36,9 @@ typedef struct {
 	uint32_t CRH;      /* GPIO port configuration register high,     Address offset: 0x04 */
 	uint32_t IDR;      /* GPIO port input data register,             Address offset: 0x08 */
 	uint32_t ODR;      /* GPIO port output data register,            Address offset: 0x0C */
-	uint32_t BSRR;     /* GPIO port bit set/reset register,          Address offset: 0x18 */
-	uint32_t BRR;      /* GPIO port bit reset register,              Address offset: 0x1A */
-	uint32_t LCKR;     /* GPIO port configuration lock register,     Address offset: 0x1C */
+	uint32_t BSRR;     /* GPIO port bit set/reset register,          Address offset: 0x10 */
+	uint32_t BRR;      /* GPIO port bit reset register,              Address offset: 0x14 */
+	uint32_t LCKR;     /* GPIO port configuration lock register,     Address offset: 0x18 */
 } GPIO_type;
 
 typedef struct {
@@ -79,12 +81,13 @@ __attribute__ ((section(".vectors"))) = {
 	((uint32_t *) main),               /* 0x04 Reset         */
 	((uint32_t *) nmi_handler),        /* 0x08 NMI           */
 	0,                                 /* 0x0C Hardfault     */
+	0,                                 /* 0x10 MemManage     */
 };
 
 // Non-maskable interrupt handler function
 void nmi_handler(void)
 {
-	for (;;);
+	for (;;);  // Wait forever
 }
 
 /*************************************************
@@ -98,7 +101,7 @@ int32_t main(void)
 
 	// Another way to write a 1 to a bit location is to shift it that much
 	// Meaning shift number 1, 5 times to the left. Which would result in
-	// 0b100000
+	// 0b100000 or 0x20
 	// RCC->APB2ENR |= (1 << 5);
 
 	// Since we need to modify 4 bits to make Pin 1 output (Pins 7-4)
@@ -124,6 +127,8 @@ int32_t main(void)
 		delay(LEDDELAY);
 	}
 
+	__asm__("NOP"); // Assembly inline can be used if needed
+
 	// Should never reach here
 	return 0;
 }
@@ -132,6 +137,6 @@ int32_t main(void)
 void delay(volatile uint32_t s)
 {
 	for(s; s>0; s--){
-		__asm__("NOP"); // Do nothing (assembly inline if needed)
+		// Do nothing
 	}
 }

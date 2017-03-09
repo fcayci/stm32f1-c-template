@@ -1,4 +1,4 @@
-# stm32f1-c
+# stm32f1-c-template
 
 C template for an STM32F107-based board. (Cortex-M3)
 
