@@ -15,7 +15,7 @@ Tested on EasyMx Pro v7 board with STM32F107 chip.
 Cleaning...
 Building template.c
    text	   data	    bss	    dec	    hex	filename
-    130	      0	      0	    130	     82	template.elf
+    136	      0	      0	    136	     88	template.elf
 Successfully finished...
 ```
 
@@ -26,4 +26,3 @@ Successfully finished...
 ...
 Flash written and verified! jolly good!
 ```
-* Sometimes you might need to burn twice to get it working or reset after the first one.
