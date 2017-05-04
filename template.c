@@ -57,6 +57,7 @@ typedef struct {
 } RCC_type;
 
 // Function declarations. Add your functions here
+void copy_data(void);
 void nmi_handler(void);
 int32_t main(void);
 void delay(volatile uint32_t s);
@@ -84,6 +85,24 @@ __attribute__ ((section(".vectors"))) = {
 	0,                                 /* 0x10 MemManage     */
 };
 
+/*************************************************
+* Copy the data contents from LMA to VMA
+*************************************************/
+void copy_data(void)
+{
+	extern char _etext, _sdata, _edata, _sbss, _ebss;
+	char *src = &_etext;
+	char *dst = &_sdata;
+
+	/* ROM has data at end of text; copy it.  */
+	while (dst < &_edata)
+		*dst++ = *src++;
+
+	/* Zero bss.  */
+	for (dst = &_sbss; dst< &_ebss; dst++)
+		*dst = 0;
+}
+
 // Non-maskable interrupt handler function
 void nmi_handler(void)
 {
@@ -95,6 +114,8 @@ void nmi_handler(void)
 *************************************************/
 int32_t main(void)
 {
+	// Copy LMA to VMA for data section
+	copy_data();
 	// Set Bit 5 to enable GPIOD clock
 	// APB2ENR: XXXX XXXX XXXX XXXX XXXX XXXX XX1X XXXX
 	RCC->APB2ENR |= 0x00000020;

@@ -7,7 +7,7 @@ Tested on EasyMx Pro v7 board with STM32F107 chip.
 # Install
 * Toolchain - [GNU ARM Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 * (Windows only) - [MinGW and MSYS ](http://www.mingw.org/)
-* Programmer - [STLink](https://github.com/texane/stlink)
+* Programmer & Debugger - [STLink](https://github.com/texane/stlink)
 
 # Compile
 * Browse into the directory and run `make` to compile.
@@ -15,7 +15,7 @@ Tested on EasyMx Pro v7 board with STM32F107 chip.
 Cleaning...
 Building template.c
    text	   data	    bss	    dec	    hex	filename
-    136	      0	      0	    136	     88	template.elf
+    216	      0	      0	    216	     d8	template.elf
 Successfully finished...
 ```
 
@@ -23,6 +23,10 @@ Successfully finished...
 * Run `make burn` to program the chip.
 ```
 ...
-...
 Flash written and verified! jolly good!
 ```
+
+# Debug
+* Run `st-util` from one terminal
+* Run `make debug` from a second terminal to debug the program.
+* You can turn off tui layout with `tui disable` if needed
